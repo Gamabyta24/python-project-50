@@ -6,6 +6,30 @@ def read_json_file(file_path):
     with open(file_path, 'r') as file:
         return json.load(file)
 
+def generate_diff(file1,file2):
+    with open(file1) as f1, open(file2) as f2:
+        data1 = json.load(f1)
+        data2 = json.load(f2)
+    all_keys = sorted(set(data1.keys()).union(set(data2.keys())))
+    result = []
+    for key in all_keys:
+        value1 = data1.get(key)
+        value2 = data2.get(key)
+        if key in data1 and key not in data2:
+            result.append(f" - {key}:{value1}")
+        elif key not in data1 and key in data2:
+            result.append(f" + {key}:{value2}")
+        elif value1 != value2:
+            result.append(f" - {key}:{value1}")
+            result.append(f" + {key}:{value2}")
+        else:
+            result.append(f"   {key}: {value1}")
+    result = "{\n" + "\n".join(result) + "\n}"
+    return result
+        
+
+
+
 def main():
     parser = argparse.ArgumentParser(description="Compares two configuration files and shows a difference.")
     
@@ -20,9 +44,10 @@ def main():
     # Чтение и парсинг файлов
     data1 = read_json_file(args.first_file)
     data2 = read_json_file(args.second_file)
-
-    print("Содержимое", args.first_file, ":", data1)
-    print("Содержимое", args.second_file, ":", data2)
+    result = generate_diff(args.first_file,args.second_file)
+    print(result)
+    # print("Содержимое", args.first_file, ":", data1)
+    # print("Содержимое", args.second_file, ":", data2)
 
 if __name__ == '__main__':
     main()
