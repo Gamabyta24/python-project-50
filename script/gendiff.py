@@ -1,17 +1,17 @@
 import argparse
 import json
+import yaml
+import os
+from script.pars import read_file
 
 
-def read_json_file(file_path):
-    """Читает и парсит JSON-файл."""
-    with open(file_path, "r") as file:
-        return json.load(file)
+
 
 
 def generate_diff(file1, file2):
-    with open(file1) as f1, open(file2) as f2:
-        data1 = json.load(f1)
-        data2 = json.load(f2)
+    
+    data1 = read_file(file1)
+    data2 = read_file(file2)
 
     all_keys = sorted(set(data1.keys()).union(set(data2.keys())))
     result = []
