@@ -3,7 +3,6 @@ import json
 import os
 def read_file(file_path):
     extension = os.path.splitext(file_path)[1].lower()
-    print(extension)
     with open(file_path, "r") as file:
         if extension == '.json':
             return json.load(file)
