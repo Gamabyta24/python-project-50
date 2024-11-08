@@ -2,7 +2,6 @@ import yaml
 import json
 import os
 def read_file(file_path):
-    """Читает и парсит JSON-файл."""
     extension = os.path.splitext(file_path)[1].lower()
     print(extension)
     with open(file_path, "r") as file:
