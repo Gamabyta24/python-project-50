@@ -1,5 +1,5 @@
 import json
-from script.gendiff import generate_diff
+from gendiff.generate_diff import generate_diff
 import pytest
 import yaml
 
