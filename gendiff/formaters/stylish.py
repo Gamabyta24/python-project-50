@@ -1,28 +1,44 @@
-def format_stylish(diff, depth=0):
-    indent = "    " * depth
-    lines = ["{"]
+SEPARATOR = " "
+ADD = '+ '
+DELETE = '- '
+NONE = '  '
 
+def to_str(value, depth=2):
+    """Рекурсивная функция для преобразования значений в строковый формат с учётом отступов."""
+    indent = SEPARATOR * depth
+    if value is True:
+        return 'true'
+    elif value is False:
+        return 'false'
+    elif value is None:
+        return 'null'
+    elif isinstance(value, dict):
+        lines = [f"{indent}{{"]
+        for key, val in value.items():
+            lines.append(f"{indent}    {key}: {to_str(val, depth + 4)}")
+        lines.append(f"{indent}}}")
+        return "\n".join(lines)
+    return str(value)
+
+
+def format_stylish(diff, depth=2):
+    """Основная функция для форматирования diff в нужный стиль."""
+    lines = []
     for item in diff:
         key = item["key"]
         status = item["status"]
-        lines.append(format_item(item, status, key, depth))
+        indent = SEPARATOR * depth
 
-    lines.append(indent + "}")
-    return "\n".join(lines)
+        if status == "unchanged":
+            lines.append(f"{indent}  {key}: {to_str(item['value'], depth)}")
+        elif status == "added":
+            lines.append(f"{indent}{ADD}{key}: {to_str(item['value'], depth)}")
+        elif status == "removed":
+            lines.append(f"{indent}{DELETE}{key}: {to_str(item['value'], depth)}")
+        elif status == "updated":
+            lines.append(f"{indent}{DELETE}{key}: {to_str(item['old_value'], depth)}")
+            lines.append(f"{indent}{ADD}{key}: {to_str(item['new_value'], depth)}")
+        elif status == "nested":
+            lines.append(f"{indent}  {key}: {format_stylish(item['children'], depth + 4)}")
 
-
-def format_item(item, status, key, depth):
-    indent = "    " * depth
-    if status == "nested":
-        children = format_stylish(item["children"], depth + 1)
-        return f"{indent}    {key}: {children}"
-    elif status == "added":
-        return f"{indent}  + {key}: {item['value']}"
-    elif status == "removed":
-        return f"{indent}  - {key}: {item['value']}"
-    elif status == "updated":
-        old_value = f"{indent}  - {key}: {item['old_value']}"
-        new_value = f"{indent}  + {key}: {item['new_value']}"
-        return f"{old_value}\n{new_value}"
-    elif status == "unchanged":
-        return f"{indent}    {key}: {item['value']}"
+    return "{\n" + "\n".join(lines) + f"\n{SEPARATOR * (depth - 2)}}}"
