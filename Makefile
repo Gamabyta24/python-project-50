@@ -1,7 +1,7 @@
 lint:
 	poetry run flake8
 format:
-	poetry run black script
+	poetry run black gendiff
 install:
 	poetry install
 pack-install:

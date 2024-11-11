@@ -1,4 +1,4 @@
 SPACE = " "
-ADD = '+ '
-REMOVE = '- '
-NONE = '  '
+ADD = "+ "
+REMOVE = "- "
+NONE = "  "
