@@ -12,14 +12,14 @@ def format_plain(diff):
     def walk(diff, path=""):
         status_handlers = {
             "added": added(),
-            "removed": removed(),
-            "updated": updated(),
+            "deleted": removed(),
+            "modified": updated(),
             "nested": nested(walk),
         }
 
         for item in diff:
-            key = item["key"]
-            status = item["status"]
+            key = item["name"]
+            status = item["action"]
             property_path = f"{path}.{key}".strip(".")
 
             handler = status_handlers.get(status)
@@ -35,7 +35,7 @@ def format_plain(diff):
 def added():
     return (
         lambda item, path:
-        f"Property '{path}' was added with value: {format_value(item['value'])}"
+        f"Property '{path}' was added with value: {format_value(item['new_value'])}"
     )
 
 
