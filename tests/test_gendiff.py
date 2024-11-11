@@ -16,15 +16,19 @@ def create_json_file(tmp_path):
 
     return _create_json_file
 
+
 @pytest.fixture
 def create_yaml_file(tmp_path):
     """Фикстура для создания временного YAML файла."""
+
     def _create_yaml_file(filename, data):
         file_path = tmp_path / filename
         with open(file_path, "w") as file:
             yaml.dump(data, file)
         return file_path
+
     return _create_yaml_file
+
 
 def test_no_differences(create_json_file):
     # Одинаковые файлы
@@ -85,6 +89,7 @@ def test_no_differences_yml(create_yaml_file):
     key2: value2
 }"""
     assert result.strip() == expected_output.strip()
+
 
 def test_key_added_yml(create_yaml_file):
     # Один файл содержит дополнительный ключ

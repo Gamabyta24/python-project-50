@@ -1,32 +1,54 @@
+def format_value(value):
+    if isinstance(value, dict) or isinstance(value, list):
+        return "[complex value]"
+    elif isinstance(value, str):
+        return f"'{value}'"
+    return str(value).lower()
+
+
 def format_plain(diff):
     lines = []
 
-    def format_value(value):
-        if isinstance(value, dict) or isinstance(value, list):
-            return '[complex value]'
-        elif isinstance(value, str):
-            return f"'{value}'"
-        return str(value).lower() 
+    def walk(diff, path=""):
+        status_handlers = {
+            "added": added(),
+            "removed": removed(),
+            "updated": updated(),
+            "nested": nested(walk),
+        }
 
-    def walk(diff, path=''):
         for item in diff:
-            key = item['key']
-            status = item['status']
-            property_path = f"{path}.{key}".strip('.')
+            key = item["key"]
+            status = item["status"]
+            property_path = f"{path}.{key}".strip(".")
 
-            if status == 'added':
-                lines.append(
-                    f"Property '{property_path}' was added with value: {format_value(item['value'])}"
-                )
-            elif status == 'removed':
-                lines.append(f"Property '{property_path}' was removed")
-            elif status == 'updated':
-                lines.append(
-                    f"Property '{property_path}' was updated. From {format_value(item['old_value'])} "
-                    f"to {format_value(item['new_value'])}"
-                )
-            elif status == 'nested':
-                walk(item['children'], property_path)
+            handler = status_handlers.get(status)
+            if handler:
+                result = handler(item, property_path)
+                if result:
+                    lines.append(result)
 
     walk(diff)
-    return '\n'.join(lines)
+    return "\n".join(lines)
+
+
+def added():
+    return (
+        lambda item, path:
+        f"Property '{path}' was added with value: {format_value(item['value'])}"
+    )
+
+
+def removed():
+    return lambda item, path: f"Property '{path}' was removed"
+
+
+def updated():
+    return lambda item, path: (
+        f"Property '{path}' was updated. From {format_value(item['old_value'])} "
+        f"to {format_value(item['new_value'])}"
+    )
+
+
+def nested(walk):
+    return lambda item, path: walk(item["children"], path)
