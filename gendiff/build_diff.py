@@ -36,6 +36,8 @@ def form_v(value):
         return "true"
     elif value is False:
         return "false"
+    elif value is None:
+        return "null"
     return value
 
 
