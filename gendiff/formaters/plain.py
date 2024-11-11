@@ -3,6 +3,8 @@ def format_value(value):
         return "[complex value]"
     elif isinstance(value, str):
         return f"'{value}'"
+    elif value == None:
+        return 'null'
     return str(value).lower()
 
 
