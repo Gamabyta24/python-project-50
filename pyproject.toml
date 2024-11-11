@@ -20,6 +20,7 @@ gendiff = "gendiff.generate_diff:main"
 flake8 = "^7.1.1"
 black = "^24.10.0"
 pytest = "^8.3.3"
+pytest-cov = "^6.0.0"
 
 [build-system]
 requires = ["poetry-core"]
