@@ -1,75 +1,66 @@
-# def build_diff(data1, data2):
-#     diff = []
+def for_add(key, value):
+    return {
+        'action': 'added',
+        'name': key,
+        'new_value': value
+    }
 
-#     all_keys = sorted(set(data1.keys()).union(data2.keys()))
+
+def for_delete(key, value):
+    return {
+        'action': 'deleted',
+        'name': key,
+        'old_value': value
+    }
 
 
-#     for key in all_keys:
-#         if key not in data2:
-#             diff.append({"key": key, "status": "removed", "value": data1[key]})
-#         elif key not in data1:
-#             diff.append({"key": key, "status": "added", "value": data2[key]})
-#         elif isinstance(data1[key], dict) and isinstance(data2[key], dict):
-#             diff.append(
-#                 {
-#                     "key": key,
-#                     "status": "nested",
-#                     "children": build_diff(data1[key], data2[key]),
-#                 }
-#             )
-#         elif data1[key] == data2[key]:
-#             diff.append(
-#                 {"key": key, "status": "unchanged", "value": data1[key]})
-#         else:
-#             diff.append(
-#                 {
-#                     "key": key,
-#                     "status": "updated",
-#                     "old_value": data1[key],
-#                     "new_value": data2[key],
-#                 }
-#             )
-#     print(diff)
-#     return diff
-def form_v(value):
-    if value is True:
-        return "true"
-    elif value is False:
-        return "false"
-    elif value is None:
-        return "null"
-    return value
+def for_unchanged(key, value):
+    return {
+        'action': 'unchanged',
+        'name': key,
+        'value': value
+    }
+
+
+def for_modified(key, value1, value2):
+    return {
+        'action': 'modified',
+        'name': key,
+        'new_value': value2,
+        'old_value': value1
+    }
+
+
+def for_nested(key, value1, value2):
+    return {
+        'action': 'nested',
+        'name': key,
+        'children': build_diff(value1, value2)
+    }
 
 
 def build_diff(data1, data2):
+    keys = data1.keys() | data2.keys()
+    added = data2.keys() - data1.keys()
+    deleted = data1.keys() - data2.keys()
+
     diff = []
 
-    all_keys = sorted(set(data1.keys()).union(data2.keys()))
+    for key in keys:
+        value1 = data1.get(key)
+        value2 = data2.get(key)
 
-    for key in all_keys:
-        if key not in data2:
-            diff.append({"key": key, "status": "removed", "value": form_v(data1[key])})
-        elif key not in data1:
-            diff.append({"key": key, "status": "added", "value": form_v(data2[key])})
-        elif isinstance(data1[key], dict) and isinstance(data2[key], dict):
-            diff.append(
-                {
-                    "key": key,
-                    "status": "nested",
-                    "children": build_diff(data1[key], data2[key]),
-                }
-            )
-        elif data1[key] == data2[key]:
-            diff.append(
-                {"key": key, "status": "unchanged", "value": form_v(data1[key])}
-            )
+        if key in added:
+            diff.append(for_add(key, value2))
+        elif key in deleted:
+            diff.append(for_delete(key, value1))
+        elif isinstance(value1, dict) and isinstance(value2, dict):
+            diff.append(for_nested(key, value1, value2))
+        elif value1 != value2:
+            diff.append(for_modified(key, value1, value2))
         else:
-            diff.append(
-                {
-                    "key": key,
-                    "status": "updated",
-                    "old_value": form_v(data1[key]),
-                    "new_value": form_v(data2[key]),
-                }
-            )
-    return diff
+            diff.append(for_unchanged(key, value1))
+
+    sorted_diff = sorted(diff, key=lambda x: x['name'])
+
+    return sorted_diff
