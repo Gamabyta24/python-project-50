@@ -10,4 +10,4 @@ def read_file(file_path):
             return json.load(file)
         elif extension in {".yaml", ".yml"}:
             return yaml.safe_load(file)
-        return json.load(file)
+        raise ValueError(f"Unknown format: {extension}")

@@ -1,4 +1,0 @@
-SPACE = " "
-ADD = "+ "
-REMOVE = "- "
-NONE = "  "

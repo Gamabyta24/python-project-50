@@ -1,14 +1,14 @@
 import pytest
 from gendiff.generate_diff import generate_diff
 import sys
-from gendiff.generate_diff import main
+from gendiff.scripts.main import main
 
-file1_path = "files/file1.json"
-file2_path = "files/file2.json"
+file1_path = "tests/files/file1.json"
+file2_path = "tests/files/file2.json"
 
-expected_stylish_output = "tests/exp_stylish.txt"
-expected_plain_output = "tests/exp_plain.txt"
-expected_json_output = "tests/exp_json.txt"
+expected_stylish_output = "tests/fixtures/exp_stylish.txt"
+expected_plain_output = "tests/fixtures/exp_plain.txt"
+expected_json_output = "tests/fixtures/exp_json.txt"
 
 
 def read_expected_output(file_path):

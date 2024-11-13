@@ -1,4 +1,7 @@
-from gendiff.const import SPACE, ADD, REMOVE, NONE
+SPACE = " "
+ADD = "+ "
+REMOVE = "- "
+NONE = "  "
 
 
 def to_str(value, spaces_count=2):
