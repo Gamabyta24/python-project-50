@@ -19,6 +19,8 @@ jobs:
 
       - name: Install dependencies
         run: |
+          pip install poetry
+          make install
           poetry add pytest pytest-cov codeclimate-test-reporter
 
       - name: Run tests and collect coverage
