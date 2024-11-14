@@ -4,6 +4,7 @@ import os
 
 
 def read_file(file_path):
+    """Read file from folder"""
     extension = os.path.splitext(file_path)[1].lower()
     with open(file_path, "r") as file:
         if extension == ".json":

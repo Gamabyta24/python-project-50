@@ -1,4 +1,5 @@
 def format_value(value):
+    """format value to str"""
     if isinstance(value, dict) or isinstance(value, list):
         return "[complex value]"
     elif isinstance(value, str):
@@ -9,9 +10,11 @@ def format_value(value):
 
 
 def format_plain(diff):
+    """transforms differents from list to str in 'plain' format."""
     lines = []
 
     def walk(diff, path=""):
+        """Recursively processes differences and produces strings in 'plain' format."""
         status_handlers = {
             "added": added(),
             "deleted": removed(),

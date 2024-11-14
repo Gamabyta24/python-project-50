@@ -17,7 +17,7 @@ pytest-cov = "^6.0.0"
 codeclimate-test-reporter = "^0.2.3"
 
 [tool.poetry.scripts]
-gendiff = "gendiff.scripts.main:main"
+gendiff = "gendiff.scripts.gendiff:main"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.1.1"

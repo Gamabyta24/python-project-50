@@ -1,9 +1,10 @@
 from gendiff.formaters.stylish import format_stylish
 from gendiff.formaters.plain import format_plain
-from gendiff.formaters.fjson import format_json
+from gendiff.formaters.json import format_json
 
 
 def get_formatter(format_name):
+    """gets a formatter from several options."""
     formatters = {
         "stylish": format_stylish,
         "plain": format_plain,

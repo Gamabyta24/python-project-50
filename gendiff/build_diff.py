@@ -19,6 +19,7 @@ def for_nested(key, value1, value2):
 
 
 def build_diff(data1, data2):
+    """Build differents between data1 and data2 and returns in list"""
     keys = data1.keys() | data2.keys()
     added = data2.keys() - data1.keys()
     deleted = data1.keys() - data2.keys()
