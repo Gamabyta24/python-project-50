@@ -53,10 +53,9 @@ def removed():
 
 def updated():
     return lambda item, path: (
-        f"Property '{path}' was updated. From {
-            format_value(item['old_value'])
-            } "
-        f"to {format_value(item['new_value'])}"
+        f"Property '{path}' was updated. From "
+        f"{format_value(item['old_value'])} to "
+        f"{format_value(item['new_value'])}"
     )
 
 
