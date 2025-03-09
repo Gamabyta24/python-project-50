@@ -11,11 +11,18 @@ def for_unchanged(key, value):
 
 
 def for_modified(key, value1, value2):
-    return {"action": "modified", "name": key, "new_value": value2, "old_value": value1}
+    return {"action": "modified",
+            "name": key,
+            "new_value": value2,
+            "old_value": value1
+            }
 
 
 def for_nested(key, value1, value2):
-    return {"action": "nested", "name": key, "children": build_diff(value1, value2)}
+    return {"action": "nested",
+            "name": key,
+            "children": build_diff(value1, value2)
+            }
 
 
 def build_diff(data1, data2):

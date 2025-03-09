@@ -14,7 +14,10 @@ def format_plain(diff):
     lines = []
 
     def walk(diff, path=""):
-        """Recursively processes differences and produces strings in 'plain' format."""
+        """
+        Recursively processes differences
+        and produces strings in 'plain' format.
+        """
         status_handlers = {
             "added": added(),
             "deleted": removed(),
@@ -50,7 +53,9 @@ def removed():
 
 def updated():
     return lambda item, path: (
-        f"Property '{path}' was updated. From {format_value(item['old_value'])} "
+        f"Property '{path}' was updated. From {
+            format_value(item['old_value'])
+            } "
         f"to {format_value(item['new_value'])}"
     )
 
